@@ -1,0 +1,23 @@
+- name: Install and configure Apache with a custom welcome page
+  hosts: test
+  become: yes
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Deploy custom welcome page
+      template:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: Ensure Apache is running
+      service:
+        name: apache2
+        state: started
+        enabled: yes
